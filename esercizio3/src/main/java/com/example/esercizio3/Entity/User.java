@@ -17,11 +17,15 @@ public class User {
     private Role role;
     private Reservation[] reservationList;
 
-    public User(String name, Role role) {
+    private User(String name, Role role) {
         id += counter;
         this.name = name;
         this.role = role;
         counter++;
+    }
+
+    public static User createUser(String name, Role role) {
+        return new User(name, role);
     }
 
     @Override

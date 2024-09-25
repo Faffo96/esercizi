@@ -1,32 +1,44 @@
 package com.example.esercizio3.Entity;
 
+import com.example.esercizio3.Enum.Role;
 import com.example.esercizio3.Enum.SlotType;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class Slot {
+    private static int counter;
     private int id;
     private SlotType type;
     private boolean full;
     private LocalDateTime date;
     private LocalDateTime endDate;
     private Garage garage;
-    private List<Reservation> reservationList;
     private int level;
 
-    public Slot(int id, SlotType type, boolean full, LocalDateTime date, LocalDateTime endDate, Garage garage, List<Reservation> reservationList, int level) {
-        this.id = id;
+    private Slot(SlotType type, LocalDateTime date, LocalDateTime endDate, Garage garage, int level) {
+        this.id += counter;
         this.type = type;
-        this.full = full;
+        this.full = false;
         this.date = date;
         this.endDate = endDate;
         this.garage = garage;
-        this.reservationList = reservationList;
         if (level <= garage.getLevels()) {
             this.level = level;
-        } else throw new RuntimeException("Impossibile scegliere il piano " + level + ". Il garage possiede solo " + garage.getLevels() + " piani.");
+        } else throw new RuntimeException("Impossibile scegliere il piano " + level + ". Il garage possiede solo il piano terra (0) e " + garage.getLevels() + " piani.");
+    }
+
+    public static Slot createSlot(SlotType type, LocalDateTime date, LocalDateTime endDate, Garage garage, int level, User user) {
+        if(user.getRole().equals(Role.ADMIN)) {
+            Slot slot = new Slot(type, date, endDate, garage, level);
+            List<Slot> slots = garage.getSlotList();
+            slots.add(slot);
+            garage.setSlotList(slots);
+            return slot;
+        }
+        throw new RuntimeException("Solo un Admin puo' creare un Garage.");
     }
 
     @Override
