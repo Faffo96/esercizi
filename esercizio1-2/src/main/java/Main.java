@@ -35,11 +35,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("ESERCIZIO 1:");
         System.out.println(palindroma("anna"));
+        System.out.println(palindroma("paola"));
 
         System.out.println("ESERCIZIO 2:");
         System.out.println(insertIntoArray(numbers, 1, 10));
-
-        System.out.println("ESERCIZIO 3:");
-
     }
 }
