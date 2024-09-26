@@ -1,9 +1,15 @@
 package com.example.esercizio3.Entity;
 
+import com.example.esercizio3.Enum.CarType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -14,11 +20,73 @@ public class Reservation {
     private User user;
     private Car car;
     private Slot slot;
+    private LocalDateTime date;
+    private LocalDateTime endDate;
+    private double hourPrice = 3;
+    private double monthlyPrice = 200;
+    private boolean monthly;
+    private double total;
 
-    public Reservation(User user, Car car, Slot slot) {
+    private Reservation(User user, Car car, Slot slot, LocalDateTime date, LocalDateTime endDate, boolean monthly) {
         this.id += counter;
         this.user = user;
         this.car = car;
         this.slot = slot;
+        this.date = date;
+        this.endDate = endDate;
+        this.monthly = monthly;
     }
+
+    public static Reservation createReservation(User user, Car car, Slot slot, LocalDateTime date, LocalDateTime endDate, boolean monthly) {
+        checkGplAndLevel(car, slot);
+        isSameSlotType(car, slot);
+        slot.setFull(true);
+        checkCategoryHalfFull(slot);
+
+        if (!slot.isFull()) {
+            return new Reservation(user, car, slot, date, endDate, monthly);
+        } else throw new RuntimeException("Il parcheggio " + slot.getId() + " è già occupato.");
+    }
+
+    private static void checkGplAndLevel(Car car, Slot slot) {
+        if (car.getType() == CarType.GPL && slot.getLevel() != 1) {
+            throw new RuntimeException("Le auto GPL possono parcheggiare solo al piano 1.");
+        }
+    }
+
+    private static void isSameSlotType(Car car, Slot slot) {
+        if (car.getSlotType() != slot.getType()) {
+            throw new RuntimeException("Un'auto " + car.getSlotType() + " non può essere inserita in un parcheggio per veicoli " + slot.getType() + " .");
+        }
+    }
+
+    private static void checkCategoryHalfFull(Slot slot) {
+        List<Slot> slots = Slot.getSlotByType(slot.getGarage(), slot.getType());
+        List<Slot> fullSlots = slots.stream().filter(Slot::isFull).toList();
+        if (fullSlots.size() > (slots.size()/2)) {
+            throw new RuntimeException("Impossibile prenotare. Il numero di auto " + slot.getType() + " supera il 50% della capienza per la sua categoria.");
+        }
+    }
+
+    public double checkout() {
+        if (!monthly) {
+            Duration duration = Duration.between(date, endDate);
+            long hours = duration.toHours();
+            if (hours > 8) {
+                switch (slot.getType()) {
+                    case LUXURY -> {
+                        total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 1));
+                    }
+                    case BIG -> {
+                        total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.7));
+                    }
+                    case NORMAL -> {
+                        total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.5));
+                    }
+                } slot.setFull(false);
+                return total;
+            }  return total = hours * hourPrice;
+        } return total = monthlyPrice;
+    }
+
 }

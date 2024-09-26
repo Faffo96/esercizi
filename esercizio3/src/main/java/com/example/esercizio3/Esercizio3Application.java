@@ -25,24 +25,31 @@ public class Esercizio3Application {
 		Garage garage = Garage.createGarage(5, user1);
 		System.out.println("3: " + garage);
 
-		Slot slot = Slot.createSlot(SlotType.NORMAL, now, now.plusHours(2), garage, 0, user1);
-		Slot slot1 = Slot.createSlot(SlotType.BIG, now, now.plusDays(3), garage, 1, user1);
-		Slot slot2 = Slot.createSlot(SlotType.LUXURY, now, now.plusDays(4), garage, 2, user1);
+		Slot slot = Slot.createSlot(SlotType.BIG, garage, 0, user1);
+		Slot slot1 = Slot.createSlot(SlotType.LUXURY, garage, 1, user1);
+		Slot slot2 = Slot.createSlot(SlotType.LUXURY, garage, 2, user1);
 		System.out.println("4: " + slot);
 		System.out.println("5: " + slot1);
 		System.out.println("6: " + slot2);
 		System.out.println("7: " + garage.getSlotList());
 
-		Car car = Car.createCar("AB123CD", CarType.DIESEL, user);
-		Car car1 = Car.createCar("EF123GH", CarType.PETROL, user);
-		Car car2 = Car.createCar("IL123MN", CarType.GPL, user1);
+		Car car = Car.createCar("AB123CD", CarType.DIESEL, SlotType.LUXURY, user);
+		Car car1 = Car.createCar("EF123GH", CarType.PETROL, SlotType.BIG, user);
+		Car car2 = Car.createCar("IL123MN", CarType.GPL, SlotType.NORMAL, user1);
 		System.out.println("8: " + car);
 		System.out.println("9: " + car1);
 		System.out.println("10: " + car2);
 		System.out.println("11: " + user.getCarList());
 
-		Reservation reservation = new Reservation(user, user.getCarList().get(0), slot);
+		Reservation reservation = Reservation.createReservation(user, user.getCarList().get(0), slot2, now, now.plusHours(0), true);
+
 		System.out.println("12: " + reservation);
+
+		System.out.println("13: " + Slot.getSlotByLevel(garage, 0).size());
+
+		System.out.println("14: " + Slot.getSlotByType(garage, SlotType.LUXURY));
+
+		System.out.println(reservation.checkout());
 	}
 
 }

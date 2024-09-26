@@ -1,6 +1,7 @@
 package com.example.esercizio3.Entity;
 
 import com.example.esercizio3.Enum.CarType;
+import com.example.esercizio3.Enum.SlotType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +14,18 @@ import java.util.List;
 public class Car {
     private String plateCode;
     private CarType type;
+    private SlotType slotType;
     private User user;
 
-    public Car(String plateCode, CarType type, User user) {
+    public Car(String plateCode, CarType type, SlotType slotType, User user) {
         this.plateCode = plateCode;
         this.type = type;
+        this.slotType = slotType;
         this.user = user;
     }
 
-    public static Car createCar(String plateCode, CarType carType, User user) {
-        Car car = new Car(plateCode, carType, user);
+    public static Car createCar(String plateCode, CarType carType, SlotType slotType, User user) {
+        Car car = new Car(plateCode, carType, slotType, user);
         List<Car> cars = user.getCarList();
         cars.add(car);
         user.setCarList(cars);
