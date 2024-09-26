@@ -70,33 +70,41 @@ public class Reservation {
         }
     }
 
-    public double checkout() {
+    public double checkout(double hours) {
         if (!monthly) {
-            Duration duration = Duration.between(date, endDate);
-            long hours = duration.toHours();
+            endDate = LocalDateTime.now();
+            System.out.println("Hours: " + hours);
+            System.out.println("Slot Type: " + slot.getType()); // Verifica il tipo di slot
+            System.out.println("Hour Price: " + hourPrice);
             slot.setFull(false);
+            System.out.println("total " + calculateHoursTotal(hours));
             return calculateHoursTotal(hours);
-        } slot.setFull(false);
-        return total = monthlyPrice;
+        } else {
+            endDate = LocalDateTime.now();
+            slot.setFull(false);
+            monthly=false;
+            return total = monthlyPrice;
+        }
+
     }
 
     public double calculateHoursTotal(double hours) {
         if (hours > 8) {
             switch (slot.getType()) {
                 case LUXURY -> {
-                    total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 1));
+                    return ((8 * hourPrice) + ((hours - 8) * (hourPrice + 1)));
                 }
                 case BIG -> {
-                    total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.7));
+                    return ((8 * hourPrice) + ((hours - 8) * (hourPrice + 0.7)));
                 }
                 case NORMAL -> {
-                    total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.5));
+                    return ((8 * hourPrice) + ((hours - 8) * (hourPrice + 0.5)));
                 }
                 default -> throw new RuntimeException("Errore nel checkout.");
             }
-            return total;
+        } else {
+            return hours * hourPrice;
         }
-        return total = hours * hourPrice;
     }
 
     public static Reservation getByCarPlate(List<Reservation> reservations, String carPlate) {

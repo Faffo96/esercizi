@@ -38,6 +38,7 @@ public class Car {
                 "plateCode='" + plateCode + '\'' +
                 ", type=" + type +
                 ", user=" + user +
+                ", slotType=" + slotType +
                 '}';
     }
 }
