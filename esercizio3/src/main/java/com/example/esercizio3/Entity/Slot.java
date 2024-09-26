@@ -24,6 +24,7 @@ public class Slot {
         if (level <= garage.getLevels()) {
             this.level = level;
         } else throw new RuntimeException("Impossibile scegliere il piano " + level + ". Il garage possiede solo il piano terra (0) e " + garage.getLevels() + " piani.");
+        counter++;
     }
 
     public static Slot createSlot(SlotType type, Garage garage, int level, User user) {

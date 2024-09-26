@@ -19,6 +19,7 @@ public class Garage {
     private Garage(int levels) {
         this.id += counter;
         this.levels = levels;
+        counter++;
     }
 
     public static Garage createGarage(int levels, User user) {

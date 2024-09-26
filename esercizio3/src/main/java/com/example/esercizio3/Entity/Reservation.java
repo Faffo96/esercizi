@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -22,29 +23,30 @@ public class Reservation {
     private Slot slot;
     private LocalDateTime date;
     private LocalDateTime endDate;
-    private double hourPrice = 3;
-    private double monthlyPrice = 200;
+    private static double hourPrice = 3;
+    private static double monthlyPrice = 200;
     private boolean monthly;
     private double total;
 
-    private Reservation(User user, Car car, Slot slot, LocalDateTime date, LocalDateTime endDate, boolean monthly) {
+    private Reservation(User user, Car car, Slot slot, LocalDateTime date, boolean monthly) {
         this.id += counter;
         this.user = user;
         this.car = car;
         this.slot = slot;
         this.date = date;
-        this.endDate = endDate;
         this.monthly = monthly;
+        counter++;
     }
 
-    public static Reservation createReservation(User user, Car car, Slot slot, LocalDateTime date, LocalDateTime endDate, boolean monthly) {
+    public static Reservation createReservation(User user, Car car, Slot slot, LocalDateTime date, boolean monthly) {
         checkGplAndLevel(car, slot);
         isSameSlotType(car, slot);
-        slot.setFull(true);
+
         checkCategoryHalfFull(slot);
 
         if (!slot.isFull()) {
-            return new Reservation(user, car, slot, date, endDate, monthly);
+            slot.setFull(true);
+            return new Reservation(user, car, slot, date, monthly);
         } else throw new RuntimeException("Il parcheggio " + slot.getId() + " è già occupato.");
     }
 
@@ -72,21 +74,45 @@ public class Reservation {
         if (!monthly) {
             Duration duration = Duration.between(date, endDate);
             long hours = duration.toHours();
-            if (hours > 8) {
-                switch (slot.getType()) {
-                    case LUXURY -> {
-                        total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 1));
-                    }
-                    case BIG -> {
-                        total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.7));
-                    }
-                    case NORMAL -> {
-                        total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.5));
-                    }
-                } slot.setFull(false);
-                return total;
-            }  return total = hours * hourPrice;
-        } return total = monthlyPrice;
+            slot.setFull(false);
+            return calculateHoursTotal(hours);
+        } slot.setFull(false);
+        return total = monthlyPrice;
+    }
+
+    public double calculateHoursTotal(double hours) {
+        if (hours > 8) {
+            switch (slot.getType()) {
+                case LUXURY -> {
+                    total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 1));
+                }
+                case BIG -> {
+                    total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.7));
+                }
+                case NORMAL -> {
+                    total = (8 * hourPrice) + ((hours - 8) * (hourPrice + 0.5));
+                }
+                default -> throw new RuntimeException("Errore nel checkout.");
+            }
+            return total;
+        }
+        return total = hours * hourPrice;
+    }
+
+    public static Reservation getByCarPlate(List<Reservation> reservations, String carPlate) {
+        return reservations.stream()
+                .filter(reservation -> reservation.getCar().getPlateCode().equalsIgnoreCase(carPlate))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Nessuna prenotazione trovata per la targa " + carPlate));
+    }
+
+
+    public static double getPrice(String type) {
+        if (Objects.equals(type, "hour")) {
+            return hourPrice;
+        } else {
+            return monthlyPrice;
+        }
     }
 
 }
