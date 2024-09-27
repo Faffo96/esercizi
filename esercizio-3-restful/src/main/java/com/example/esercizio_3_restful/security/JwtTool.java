@@ -1,6 +1,7 @@
 package com.example.esercizio_3_restful.security;
 
-import com.example.esercizio_3_restful.entity.User;
+import com.example.esercizio_3_restful.Entity.User;
+import com.example.esercizio_3_restful.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -56,5 +57,5 @@ public class JwtTool {
             throw new UnauthorizedException("Errore inatteso durante la verifica del token!");
         }
     }
-
+}
 
