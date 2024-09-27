@@ -84,7 +84,7 @@ public class ReservationService {
         reservation.setCar(car);
         Slot slot = slotService.getSlotById(reservationDTO.getSlot().getId());
         reservation.setDate(LocalDateTime.now());
-        reservation.setMonthly(reservationDTO.isMonthly()); 
+        reservation.setMonthly(reservationDTO.isMonthly());
         reservation.setTotal(reservationDTO.getTotal());
 
 

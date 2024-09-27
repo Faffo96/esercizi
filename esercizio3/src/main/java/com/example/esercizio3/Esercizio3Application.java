@@ -263,7 +263,7 @@ public class Esercizio3Application {
 						select = scanner.nextInt();
 						scanner.nextLine();
 					}
-					Car car = carList.get(select + 1);
+					Car car = carList.get(select - 1);
 					System.out.println("scegli un parcheggio: ");
 					for (int i = 0; i < slotList.size(); i++) {
 						System.out.println((i + 1) + " - " + slotList.get(i));
@@ -314,31 +314,31 @@ public class Esercizio3Application {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(Esercizio3Application.class, args);
+		/*SpringApplication.run(Esercizio3Application.class, args);
 		User user = User.createUser("Fabio", Role.ADMIN);
-		userList.add(user);
+		userList.add(user);*/
 		//System.out.println("1: " + user);
 		//System.out.println("2: " + user1);
 
-		Garage garage = Garage.createGarage(5, user);
-		garageList.add(garage);
+		/*Garage garage = Garage.createGarage(5, user);
+		garageList.add(garage);*/
 		//System.out.println("3: " + garage);
 
-		Slot slot = Slot.createSlot(SlotType.LUXURY, garage, 0, user);
+		/*Slot slot = Slot.createSlot(SlotType.LUXURY, garage, 0, user);
 		Slot slot1 = Slot.createSlot(SlotType.LUXURY, garage, 1, user);
 		Slot slot2 = Slot.createSlot(SlotType.LUXURY, garage, 2, user);
 		slotList.add(slot);
 		slotList.add(slot1);
-		slotList.add(slot2);
+		slotList.add(slot2);*/
 		//System.out.println("4: " + slot);
 		//System.out.println("5: " + slot1);
 		//System.out.println("6: " + slot2);
 		//System.out.println("7: " + garage.getSlotList());
 
-		Car car = Car.createCar("AB123CD", CarType.DIESEL, SlotType.LUXURY, user);
+		/*Car car = Car.createCar("AB123CD", CarType.DIESEL, SlotType.LUXURY, user);
 		Car car1 = Car.createCar("EF123GH", CarType.PETROL, SlotType.BIG, user);
 		carList.add(car);
-		carList.add(car1);
+		carList.add(car1);*/
 		//Car car2 = Car.createCar("IL123MN", CarType.GPL, SlotType.NORMAL, user1);
 		//System.out.println("8: " + car);
 		//System.out.println("9: " + car1);
