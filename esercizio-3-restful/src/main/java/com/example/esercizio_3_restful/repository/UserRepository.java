@@ -1,2 +1,4 @@
-package com.example.esercizio_3_restful.repository;public class UserRepository {
+package com.example.esercizio_3_restful.repository;
+
+public interface UserRepository {
 }

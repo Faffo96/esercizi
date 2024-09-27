@@ -228,7 +228,7 @@ public class Esercizio3Application {
 					}
 					;
 					carList.add(Car.createCar(carPlate, carType2, slotType2, userList.get(user3)));
-					System.out.println("Veicolo con targa " + carPlate + " è stato registrato con successo dal proprietario " + userList.get(user3).getName());
+					System.out.println("Veicolo con targa " + carPlate + " di tipo " + slotType2 + ". Alimentazione: " + carType2 + " è stato registrato con successo dal proprietario " + userList.get(user3).getName());
 					break;
 
 				case 6:
@@ -263,7 +263,7 @@ public class Esercizio3Application {
 						select = scanner.nextInt();
 						scanner.nextLine();
 					}
-					Car car = carList.get(select - 1);
+					Car car = carList.get(select + 1);
 					System.out.println("scegli un parcheggio: ");
 					for (int i = 0; i < slotList.size(); i++) {
 						System.out.println((i + 1) + " - " + slotList.get(i));
@@ -303,7 +303,6 @@ public class Esercizio3Application {
 					}
 					boolean yes = scanner.nextBoolean();
 					if (yes) {
-						System.out.println("Runner" + hours);
 						double total = reservation.checkout(hours);
 						System.out.println("Il veicolo con targa " + carPlate1 + " è stato ritirato. Hai pagato " + total + "euro.");
 					} else {

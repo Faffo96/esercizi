@@ -51,8 +51,8 @@ public class Reservation {
     }
 
     private static void checkGplAndLevel(Car car, Slot slot) {
-        if (car.getType() == CarType.GPL && slot.getLevel() != 1) {
-            throw new RuntimeException("Le auto GPL possono parcheggiare solo al piano 1.");
+        if (car.getType() == CarType.GPL && slot.getLevel() != 0) {
+            throw new RuntimeException("Le auto GPL possono parcheggiare solo al piano 0.");
         }
     }
 
