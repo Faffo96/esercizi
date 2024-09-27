@@ -23,8 +23,8 @@ public class Reservation {
     private Slot slot;
     private LocalDateTime date;
     private LocalDateTime endDate;
-    private static double hourPrice = 3;
-    private static double monthlyPrice = 200;
+    private double hourPrice = 3;
+    private double monthlyPrice = 200;
     private boolean monthly;
     private double total;
 }

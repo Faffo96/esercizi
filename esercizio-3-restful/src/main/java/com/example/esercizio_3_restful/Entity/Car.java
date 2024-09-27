@@ -24,7 +24,4 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "car")
-    @JsonIgnore
-    private List<Reservation> reservationList;
 }

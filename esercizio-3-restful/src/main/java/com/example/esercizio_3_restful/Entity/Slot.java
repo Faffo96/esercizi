@@ -21,7 +21,4 @@ public class Slot {
     @JoinColumn(name = "garage_id")
     private Garage garage;
     private int level;
-    @OneToMany(mappedBy = "slot")
-    @JsonIgnore
-    private List<Reservation> reservationList;
 }

@@ -34,4 +34,64 @@ public class CentralizedExceptionHandler extends ResponseEntityExceptionHandler 
         error.setDetails(e.getLocalizedMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<Object> EmailAlreadyInUseHandler(EmailAlreadyInUseException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.NOT_ACCEPTABLE);
+        error.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
+        error.setErrorCode("EMAIL_ALREADY_IN_USE");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<Object> CarNotFoundHandler(CarNotFoundException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.NOT_FOUND);
+        error.setStatusCode(HttpStatus.NOT_FOUND.value());
+        error.setErrorCode("CAR_NOT_FOUND");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GarageNotFoundException.class)
+    public ResponseEntity<Object> GarageNotFoundHandler(GarageNotFoundException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.NOT_FOUND);
+        error.setStatusCode(HttpStatus.NOT_FOUND.value());
+        error.setErrorCode("GARAGE_NOT_FOUND");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ReservationNotFoundException.class)
+    public ResponseEntity<Object> ReservationNotFoundHandler(ReservationNotFoundException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.NOT_FOUND);
+        error.setStatusCode(HttpStatus.NOT_FOUND.value());
+        error.setErrorCode("GARAGE_NOT_FOUND");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SlotNotFoundException.class)
+    public ResponseEntity<Object> SlotNotFoundHandler(SlotNotFoundException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.NOT_FOUND);
+        error.setStatusCode(HttpStatus.NOT_FOUND.value());
+        error.setErrorCode("GARAGE_NOT_FOUND");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }
