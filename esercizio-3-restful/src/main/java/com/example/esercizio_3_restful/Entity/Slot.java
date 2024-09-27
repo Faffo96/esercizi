@@ -1,8 +1,11 @@
-package com.example.test.Entity;
+package com.example.esercizio_3_restful.Entity;
 
-import com.example.test.Enum.SlotType;
+import com.example.esercizio_3_restful.Enum.SlotType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -13,9 +16,12 @@ public class Slot {
     private Long id;
     @Enumerated(EnumType.STRING)
     private SlotType type;
-    private boolean full;
+    private boolean isFull;
     @ManyToOne
     @JoinColumn(name = "garage_id")
     private Garage garage;
     private int level;
+    @OneToMany(mappedBy = "slot")
+    @JsonIgnore
+    private List<Reservation> reservationList;
 }

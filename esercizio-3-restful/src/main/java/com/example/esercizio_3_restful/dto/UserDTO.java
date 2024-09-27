@@ -1,13 +1,13 @@
 package com.example.esercizio_3_restful.dto;
 
 import com.example.esercizio_3_restful.Enum.Role;
-import com.example.esercizio_3_restful.Enum.SlotType;
-import com.example.esercizio_3_restful.entity.Car;
-import com.example.esercizio_3_restful.entity.Garage;
-import com.example.esercizio_3_restful.entity.Reservation;
+import com.example.esercizio_3_restful.Entity.Car;
+import com.example.esercizio_3_restful.Entity.Reservation;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class UserDTO {
     private Long id;
     private String name;

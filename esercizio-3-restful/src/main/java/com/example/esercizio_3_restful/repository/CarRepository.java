@@ -1,4 +1,7 @@
 package com.example.esercizio_3_restful.repository;
 
-public interface CarRepository {
+import com.example.esercizio_3_restful.Entity.Car;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CarRepository extends JpaRepository<Car, Long> {
 }
