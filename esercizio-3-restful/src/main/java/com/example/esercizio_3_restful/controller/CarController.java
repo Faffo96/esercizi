@@ -23,13 +23,23 @@ public class CarController {
         return ResponseEntity.ok(createdCar);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Car> getCarById(@PathVariable Long id) {
         try {
             Car car = carService.getCarById(id);
             return ResponseEntity.ok(car);
         } catch (CarNotFoundException e) {
             return ResponseEntity.status(404).body(null); // Not found
+        }
+    }
+
+    @GetMapping("/plate/{plateCode}")
+    public ResponseEntity<Car> getCarByPlateCode(@PathVariable String plateCode) {
+        try {
+            Car car = carService.getCarByPlateCode(plateCode);
+            return ResponseEntity.ok(car);
+        } catch (CarNotFoundException e) {
+            return ResponseEntity.status(404).body(null);
         }
     }
 

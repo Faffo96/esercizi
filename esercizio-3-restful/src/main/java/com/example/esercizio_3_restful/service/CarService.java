@@ -81,4 +81,9 @@ public class CarService {
         loggerInfo.info("Car with id " + id + " deleted successfully.");
         return "Car with id " + id + " deleted successfully.";
     }
+
+    public Car getCarByPlateCode(String plateCode) throws CarNotFoundException {
+        return carRepository.findByPlateCode(plateCode)
+                .orElseThrow(() -> new CarNotFoundException("Car not found with plate: " + plateCode));
+    }
 }

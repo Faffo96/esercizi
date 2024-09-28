@@ -3,10 +3,9 @@ package com.example.esercizio_3_restful.service;
 import com.example.esercizio_3_restful.Entity.Garage;
 import com.example.esercizio_3_restful.Entity.Slot;
 import com.example.esercizio_3_restful.Entity.User;
+import com.example.esercizio_3_restful.Enum.SlotType;
 import com.example.esercizio_3_restful.dto.SlotDTO;
-import com.example.esercizio_3_restful.exception.GarageNotFoundException;
-import com.example.esercizio_3_restful.exception.SlotNotFoundException;
-import com.example.esercizio_3_restful.exception.UserNotFoundException;
+import com.example.esercizio_3_restful.exception.*;
 import com.example.esercizio_3_restful.repository.SlotRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,4 +82,29 @@ public class SlotService {
         loggerInfo.info("Slot with id " + id + " deleted successfully.");
         return "Slot with id " + id + " deleted successfully.";
     }
+
+    public List<Slot> getSlotByGarageAndLevel(Garage garage, int level) throws SlotNotFoundException {
+        try {
+            return slotRepository.findByGarageAndLevel(garage, level);
+        } catch (IllegalArgumentException e) {
+            throw new SlotNotFoundException("Invalid garage level: " + level);
+        }
+    }
+
+    public List<Slot> getSlotsByGarageAndType(Garage garage, SlotType slotType) throws InvalidSlotTypeException {
+        try {
+            return slotRepository.findByGarageAndType(garage, slotType);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidSlotTypeException("Invalid slot type: " + slotType);
+        }
+    }
+
+    public void checkCategoryHalfFull(Slot slot) throws InvalidSlotTypeException, MoreThanHalfSlotsException {
+        List<Slot> slots = getSlotsByGarageAndType(slot.getGarage(), slot.getType());
+        List<Slot> fullSlots = slots.stream().filter(Slot::isFull).toList();
+        if (fullSlots.size() > (slots.size()/2)) {
+            throw new MoreThanHalfSlotsException("Impossibile prenotare. Il numero di auto " + slot.getType() + " supera il 50% della capienza per la sua categoria.");
+        }
+    }
 }
+

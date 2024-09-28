@@ -1,15 +1,21 @@
 package com.example.esercizio_3_restful.controller;
 
+import com.example.esercizio_3_restful.Entity.Garage;
 import com.example.esercizio_3_restful.Entity.Slot;
+import com.example.esercizio_3_restful.Enum.SlotType;
 import com.example.esercizio_3_restful.dto.SlotDTO;
 import com.example.esercizio_3_restful.exception.GarageNotFoundException;
+import com.example.esercizio_3_restful.exception.InvalidSlotTypeException;
 import com.example.esercizio_3_restful.exception.SlotNotFoundException;
 import com.example.esercizio_3_restful.exception.UserNotFoundException;
+import com.example.esercizio_3_restful.service.GarageService;
 import com.example.esercizio_3_restful.service.SlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/slot")
@@ -17,6 +23,9 @@ public class SlotController {
 
     @Autowired
     private SlotService slotService;
+
+    @Autowired
+    private GarageService garageService;
 
     @PostMapping
     public ResponseEntity<Slot> createSlot(@RequestBody SlotDTO slotDTO) throws UserNotFoundException, GarageNotFoundException {
@@ -59,6 +68,28 @@ public class SlotController {
             return ResponseEntity.ok(result);
         } catch (SlotNotFoundException e) {
             return ResponseEntity.status(404).body("Slot not found with id: " + id);
+        }
+    }
+
+    @GetMapping("/garage/{garageId}/type/{type}")
+    public ResponseEntity<List<Slot>> getSlotsByGarageAndType(@PathVariable Long garageId, @PathVariable SlotType type) throws GarageNotFoundException, InvalidSlotTypeException {
+
+        Garage garage = garageService.getGarageById(garageId);
+
+        List<Slot> slots = slotService.getSlotsByGarageAndType(garage, type);
+        return ResponseEntity.ok(slots);
+    }
+
+    @GetMapping("/garage/{garageId}/level/{level}")
+    public ResponseEntity<List<Slot>> getSlotByGarageAndLevel(@PathVariable Long garageId, @PathVariable int level) {
+        try {
+            Garage garage = garageService.getGarageById(garageId);
+            List<Slot> slots = slotService.getSlotByGarageAndLevel(garage, level);
+            return ResponseEntity.ok(slots);
+        } catch (GarageNotFoundException e) {
+            return ResponseEntity.status(404).body(null);
+        } catch (SlotNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

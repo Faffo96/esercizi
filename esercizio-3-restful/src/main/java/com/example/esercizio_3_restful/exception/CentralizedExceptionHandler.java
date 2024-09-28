@@ -78,7 +78,7 @@ public class CentralizedExceptionHandler extends ResponseEntityExceptionHandler 
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.NOT_FOUND);
         error.setStatusCode(HttpStatus.NOT_FOUND.value());
-        error.setErrorCode("GARAGE_NOT_FOUND");
+        error.setErrorCode("RESERVATION_NOT_FOUND");
         error.setDetails(e.getLocalizedMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -90,8 +90,81 @@ public class CentralizedExceptionHandler extends ResponseEntityExceptionHandler 
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.NOT_FOUND);
         error.setStatusCode(HttpStatus.NOT_FOUND.value());
-        error.setErrorCode("GARAGE_NOT_FOUND");
+        error.setErrorCode("SLOT_NOT_FOUND");
         error.setDetails(e.getLocalizedMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NotSameSlotTypeException.class)
+    public ResponseEntity<Error> NotSameSlotTypeHandler(NotSameSlotTypeException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("SLOT_TYPE_MISMATCH");
+        error.setDetails(e.getLocalizedMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(CheckoutException.class)
+    public ResponseEntity<Object> CheckoutHandler(CheckoutException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("CHECKOUT_ERROR");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(GplNotAtLvl1Exception.class)
+    public ResponseEntity<Object> GplNotAtLvl1Handler(GplNotAtLvl1Exception e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("GPL_NOT_LVL_0");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidGarageLvlException.class)
+    public ResponseEntity<Object> InvalidGarageLvlHandler(InvalidGarageLvlException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("INVALID_GARAGE_LVL");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidSlotTypeException.class)
+    public ResponseEntity<Object> InvalidSlotTypeHandler(InvalidSlotTypeException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("INVALID_SLOT_TYPE");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MoreThanHalfSlotsException.class)
+    public ResponseEntity<Object> MoreThanHalfSlotsHandler(MoreThanHalfSlotsException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("MORE_THAN_HALF_SLOTS");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }

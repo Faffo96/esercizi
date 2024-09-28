@@ -73,9 +73,6 @@ public class Reservation {
     public double checkout(double hours) {
         if (!monthly) {
             endDate = LocalDateTime.now();
-            System.out.println("Hours: " + hours);
-            System.out.println("Slot Type: " + slot.getType()); // Verifica il tipo di slot
-            System.out.println("Hour Price: " + hourPrice);
             slot.setFull(false);
             System.out.println("total " + calculateHoursTotal(hours));
             return calculateHoursTotal(hours);
