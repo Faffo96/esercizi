@@ -1,5 +1,6 @@
 package com.example.esercizio_3_restful.controller;
 
+import com.example.esercizio_3_restful.Enum.Role;
 import com.example.esercizio_3_restful.dto.UserDTO;
 import com.example.esercizio_3_restful.dto.UserLoginDTO;
 import com.example.esercizio_3_restful.exception.EmailAlreadyInUseException;
@@ -35,6 +36,22 @@ public class AuthController {
                     reduce("", (s, s2) -> s + s2));
         }
         try {
+            userDTO.setRole(Role.USER);
+            userService.createUser(userDTO);
+        } catch (EmailAlreadyInUseException e) {
+            throw new EmailAlreadyInUseException(e.getMessage());
+        }
+        return "User with email " + userDTO.getEmail() + " has been created!";
+    }
+
+    @PostMapping("/auth/registerAdmin")
+    public String registerAdmin(@RequestBody @Validated UserDTO userDTO, BindingResult bindingResult) throws BadRequestException, EmailAlreadyInUseException {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.getAllErrors().stream().map(error -> error.getDefaultMessage()).
+                    reduce("", (s, s2) -> s + s2));
+        }
+        try {
+            userDTO.setRole(Role.ADMIN);
             userService.createUser(userDTO);
         } catch (EmailAlreadyInUseException e) {
             throw new EmailAlreadyInUseException(e.getMessage());

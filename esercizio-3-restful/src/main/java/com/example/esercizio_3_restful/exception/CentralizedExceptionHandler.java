@@ -167,4 +167,16 @@ public class CentralizedExceptionHandler extends ResponseEntityExceptionHandler 
         error.setDetails(e.getLocalizedMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(SlotAlreadyFullException.class)
+    public ResponseEntity<Object> SlotAlreadyFullHandler(SlotAlreadyFullException e) {
+        Error error = new Error();
+        error.setMessage(e.getMessage());
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.CONFLICT);
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setErrorCode("SLOT_ALREADY_FULL");
+        error.setDetails(e.getLocalizedMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 }

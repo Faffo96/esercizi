@@ -20,7 +20,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO) throws UserNotFoundException, CarNotFoundException, SlotNotFoundException, MoreThanHalfSlotsException, GplNotAtLvl1Exception, NotSameSlotTypeException, InvalidSlotTypeException {
+    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO) throws UserNotFoundException, CarNotFoundException, SlotNotFoundException, MoreThanHalfSlotsException, GplNotAtLvl1Exception, NotSameSlotTypeException, InvalidSlotTypeException, SlotAlreadyFullException {
         Reservation createdReservation = reservationService.createReservation(reservationDTO);
         return ResponseEntity.ok(createdReservation);
     }
@@ -50,13 +50,13 @@ public class ReservationController {
             return ResponseEntity.ok(updatedReservation);
         } catch (ReservationNotFoundException | UserNotFoundException | CarNotFoundException | SlotNotFoundException e) {
             return ResponseEntity.status(404).body(null); // Not found
-        } catch (MoreThanHalfSlotsException e) {
-            throw new RuntimeException(e);
-        } catch (GplNotAtLvl1Exception e) {
+        } catch (MoreThanHalfSlotsException | GplNotAtLvl1Exception e) {
             throw new RuntimeException(e);
         } catch (NotSameSlotTypeException e) {
             throw new RuntimeException(e);
         } catch (InvalidSlotTypeException e) {
+            throw new RuntimeException(e);
+        } catch (SlotAlreadyFullException e) {
             throw new RuntimeException(e);
         }
     }

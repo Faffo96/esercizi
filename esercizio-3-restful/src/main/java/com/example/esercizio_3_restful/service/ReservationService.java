@@ -38,7 +38,7 @@ public class ReservationService {
 
     private static final Logger loggerInfo = LoggerFactory.getLogger("loggerInfo");
 
-    public Reservation createReservation(ReservationDTO reservationDTO) throws UserNotFoundException, CarNotFoundException, SlotNotFoundException, GplNotAtLvl1Exception, NotSameSlotTypeException, MoreThanHalfSlotsException, InvalidSlotTypeException {
+    public Reservation createReservation(ReservationDTO reservationDTO) throws UserNotFoundException, CarNotFoundException, SlotNotFoundException, GplNotAtLvl1Exception, NotSameSlotTypeException, MoreThanHalfSlotsException, InvalidSlotTypeException, SlotAlreadyFullException {
         Slot slot = slotService.getSlotById(reservationDTO.getSlot().getId());
 
         if (!reservationDTO.getSlot().isFull()) {
@@ -56,12 +56,16 @@ public class ReservationService {
             reservation.setSlot(slot);
             reservation.setDate(LocalDateTime.now());
             reservation.setMonthly(reservationDTO.isMonthly());
-            slot.setFull(true);
-            if (reservationDTO.isMonthly()) {
-                reservation.setTotal(reservation.getMonthlyPrice());
-            }
+            if (!slot.isFull()) {
+                slot.setFull(true);
+                if (reservationDTO.isMonthly()) {
+                    reservation.setTotal(reservation.getMonthlyPrice());
+                }
+                reservationRepository.save(reservation);
+            } else throw new SlotAlreadyFullException("Il parcheggio " + slot.getId() + " è già occupato.");
 
-            reservationRepository.save(reservation);
+
+
 
             loggerInfo.info("Reservation with id " + reservation.getId() + " created.");
             return reservation;
@@ -90,7 +94,7 @@ public class ReservationService {
         return reservations;
     }
 
-    public Reservation updateReservation(Long id, ReservationDTO reservationDTO) throws ReservationNotFoundException, UserNotFoundException, CarNotFoundException, SlotNotFoundException, GplNotAtLvl1Exception, NotSameSlotTypeException, MoreThanHalfSlotsException, InvalidSlotTypeException {
+    public Reservation updateReservation(Long id, ReservationDTO reservationDTO) throws ReservationNotFoundException, UserNotFoundException, CarNotFoundException, SlotNotFoundException, GplNotAtLvl1Exception, NotSameSlotTypeException, MoreThanHalfSlotsException, InvalidSlotTypeException, SlotAlreadyFullException {
         Reservation reservation = getReservationById(id);
 
         Car car = carService.getCarByPlateCode(reservationDTO.getCar().getPlateCode());
@@ -105,12 +109,14 @@ public class ReservationService {
         reservation.setSlot(slot);
         reservation.setDate(LocalDateTime.now());
         reservation.setMonthly(reservationDTO.isMonthly());
-        if (reservationDTO.isMonthly()) {
-            reservation.setTotal(reservation.getMonthlyPrice());
-        }
+        if (!slot.isFull()) {
+            slot.setFull(true);
+            if (reservationDTO.isMonthly()) {
+                reservation.setTotal(reservation.getMonthlyPrice());
+            }
+            reservationRepository.save(reservation);
+        } else throw new SlotAlreadyFullException("Il parcheggio " + slot.getId() + " è già occupato.");
 
-
-        reservationRepository.save(reservation);
         loggerInfo.info("Reservation with id " + id + " updated.");
 
         return reservation;

@@ -103,7 +103,7 @@ public class SlotService {
         List<Slot> slots = getSlotsByGarageAndType(slot.getGarage(), slot.getType());
         List<Slot> fullSlots = slots.stream().filter(Slot::isFull).toList();
         if (fullSlots.size() > (slots.size()/2)) {
-            throw new MoreThanHalfSlotsException("Impossibile prenotare. Il numero di auto " + slot.getType() + " supera il 50% della capienza per la sua categoria.");
+            throw new MoreThanHalfSlotsException("Impossibile prenotare. I parcheggi di tipo " + slot.getType() + " sono già pieni al 50%.");
         }
     }
 }

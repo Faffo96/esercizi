@@ -13,6 +13,7 @@ import com.example.esercizio_3_restful.service.SlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class SlotController {
     private GarageService garageService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Slot> createSlot(@RequestBody SlotDTO slotDTO) throws UserNotFoundException, GarageNotFoundException {
         Slot createdSlot = slotService.createSlot(slotDTO);
         return ResponseEntity.ok(createdSlot);
@@ -52,6 +54,7 @@ public class SlotController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Slot> updateSlot(@PathVariable Long id, @RequestBody SlotDTO slotDTO) {
         try {
             Slot updatedSlot = slotService.updateSlot(id, slotDTO);
@@ -62,6 +65,7 @@ public class SlotController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteSlot(@PathVariable Long id) {
         try {
             String result = slotService.deleteSlot(id);

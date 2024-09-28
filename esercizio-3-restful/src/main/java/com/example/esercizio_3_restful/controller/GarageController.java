@@ -8,6 +8,7 @@ import com.example.esercizio_3_restful.service.GarageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class GarageController {
     @Autowired
     private GarageService garageService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<Garage> createGarage(@RequestBody GarageDTO garageDTO) throws UserNotFoundException {
         Garage createdGarage = garageService.createGarage(garageDTO);
@@ -42,6 +44,7 @@ public class GarageController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Garage> updateGarage(@PathVariable Long id, @RequestBody GarageDTO garageDTO) {
         try {
             Garage updatedGarage = garageService.updateGarage(id, garageDTO);
@@ -52,6 +55,7 @@ public class GarageController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteGarage(@PathVariable Long id) {
         try {
             String result = garageService.deleteGarage(id);
